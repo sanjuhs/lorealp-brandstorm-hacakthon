@@ -10,6 +10,7 @@ import {
   // ReactCompareSliderImage,
 } from "react-compare-slider";
 import type { AnalysisResult } from "@/types";
+import { SAMPLE_POSTS } from "@/data/sample-posts";
 
 interface Post {
   id: string;
@@ -32,8 +33,15 @@ export default function FeedPage() {
 
   useEffect(() => {
     try {
-      const storedPosts = JSON.parse(localStorage.getItem("posts") || "[]");
-      setPosts(storedPosts);
+      // Check if posts exist in localStorage
+      const storedPosts = localStorage.getItem("posts");
+      if (!storedPosts) {
+        // If no posts exist, use sample data
+        localStorage.setItem("posts", JSON.stringify(SAMPLE_POSTS));
+        setPosts(SAMPLE_POSTS);
+      } else {
+        setPosts(JSON.parse(storedPosts));
+      }
     } catch (error) {
       toast.error("Failed to load posts");
       console.error(error);

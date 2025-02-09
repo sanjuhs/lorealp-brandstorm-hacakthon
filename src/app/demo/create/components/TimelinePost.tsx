@@ -132,7 +132,7 @@ export function TimelinePost({ onPost }: TimelinePostProps) {
         <Button
           className="w-full bg-[#C4944C] hover:bg-[#8B6B3D]"
           onClick={handlePost}
-          disabled={!beforeImage || !afterImage || !caption.trim()}
+          disabled={(!beforeImage && !afterImage) || !caption.trim()}
         >
           Post
         </Button>

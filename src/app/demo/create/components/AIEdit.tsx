@@ -170,7 +170,7 @@ export function AIEdit({ onPost }: AIEditPostProps) {
         <Button
           className="w-full bg-[#C4944C] hover:bg-[#8B6B3D]"
           onClick={handlePost}
-          disabled={!image || !editedImage || !caption.trim()}
+          disabled={!image || !caption.trim()}
         >
           Post
         </Button>

@@ -24,6 +24,7 @@ export interface Post {
   };
   analysisResults?: AnalysisResult[];
   editPrompt?: string;
+  comments?: Comment[];
 }
 
 export interface PostData {
@@ -33,4 +34,11 @@ export interface PostData {
   description: string;
   analysisResults: AnalysisResult[];
   editPrompt?: string;
+}
+
+export interface Comment {
+  id: string;
+  username: string;
+  text: string;
+  timestamp: number;
 }

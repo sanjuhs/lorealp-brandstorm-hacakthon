@@ -324,13 +324,9 @@ ${analysis.recommendations.warnings.map((w: string) => `⚠️ ${w}`).join("\n")
         <Button
           className="w-full bg-[#C4944C] hover:bg-[#8B6B3D]"
           onClick={handlePost}
-          disabled={
-            !image || !caption.trim() || (!analysisType.none && !analyzed)
-          }
+          disabled={!image || !caption.trim()}
         >
-          {!analyzed && !analysisType.none
-            ? "Please analyze image first"
-            : "Post"}
+          {!analyzed && !analysisType.none ? "Analysis in progress..." : "Post"}
         </Button>
       </div>
     </div>
