@@ -5,7 +5,7 @@ export const SAMPLE_POSTS: Post[] = [
   {
     id: "1",
     type: "analysis",
-    images: ["/hair_data_classification/sanjay/skin_hair_analysis.jpg"],
+    images: ["/hair_data_classification/sanjay/ttc.png"],
     caption: "Getting a complete analysis of my skin and hair! 🔍",
     description:
       "Using L'Oreal's AI to understand my skin and hair better. The analysis shows I need to focus more on hydration and UV protection.",
@@ -299,6 +299,148 @@ export const SAMPLE_POSTS: Post[] = [
         username: "Peeyush",
         text: "Will make a detailed post soon! The Acno Fight range is key though 🔑",
         timestamp: Date.now() - 775600000,
+      },
+    ],
+  },
+  {
+    id: "10",
+    type: "analysis",
+    subtype: "in-depth",
+    images: ["/hair_data_classification/sanjay/skin_hair_analysis.jpg"],
+    caption: "Complete In-Depth Hair & Skin Analysis 🔬📊",
+    description:
+      "Comprehensive analysis using Fitzpatrick Scale and Andre Walker Hair Typing System. This detailed report includes both skin and hair characteristics with personalized recommendations.",
+    timestamp: Date.now() - 864000000,
+    username: "Sanjay",
+    votes: { better: 48, worse: 1 },
+    analysisResults: [
+      {
+        ruleId: "fitzpatrick",
+        compliant: true,
+        explanation: "Fitzpatrick Type IV - Medium Brown Skin",
+        score: 5,
+        details: {
+          characteristics: [
+            "Minimal to moderate sun sensitivity",
+            "Tans easily, burns minimally",
+            "Natural skin tone is medium brown",
+            "Melanin production is relatively active",
+          ],
+          recommendations: [
+            "SPF 30+ sunscreen daily",
+            "Regular hyperpigmentation monitoring",
+            "Gentle exfoliation 2-3 times weekly",
+          ],
+          risks: [
+            "Post-inflammatory hyperpigmentation",
+            "Uneven skin tone",
+            "Moderate sun damage risk",
+          ],
+        },
+        recommendedProducts: [
+          "Garnier Light Complete Serum Cream UV",
+          "Garnier Men Power White Anti Pollution Brightening Moisturiser",
+        ],
+      },
+      {
+        ruleId: "andre-walker",
+        compliant: true,
+        explanation: "Type 2B - Wavy Hair Pattern",
+        score: 4,
+        details: {
+          hairCharacteristics: {
+            type: "2B",
+            pattern: "Wavy",
+            texture: "Medium to coarse",
+            density: "Medium to high",
+            porosity: "Medium",
+            elasticity: "Good",
+          },
+          wavePattern: {
+            description: "S-shaped waves forming throughout hair shaft",
+            features: [
+              "Waves begin from mid-length",
+              "Defined S-pattern",
+              "Moderate volume at roots",
+            ],
+          },
+          careNeeds: [
+            "Moisture-protein balance",
+            "Anti-frizz protection",
+            "Heat protection when styling",
+            "Regular deep conditioning",
+          ],
+        },
+        recommendedProducts: [
+          "L'Oreal Serie Expert Pro Longer Lengths Renewing Cream",
+          "L'Oreal Professionnel Absolut Repair Mask",
+        ],
+      },
+      {
+        ruleId: "skin-analysis",
+        compliant: true,
+        explanation: "Combination Skin with T-Zone Concerns",
+        score: 4,
+        details: {
+          skinCharacteristics: {
+            type: "Combination",
+            concerns: ["T-zone oiliness", "Occasional dryness on cheeks"],
+            strengths: ["Good elasticity", "Minimal fine lines"],
+            sensitivities: ["Moderate", "Some reaction to harsh chemicals"],
+          },
+          barrierHealth: {
+            status: "Good",
+            notes: "Slight compromise in T-zone area",
+          },
+          hydrationLevel: {
+            status: "Moderate",
+            distribution: "Uneven between T-zone and cheeks",
+          },
+        },
+        recommendedProducts: [
+          "Garnier Men Oil Clear Clay D-Tox",
+          "Garnier Men Acno Fight Anti-Pimple Face Wash",
+        ],
+      },
+    ],
+    actionableInsights: {
+      immediate: [
+        "Start with double cleansing routine",
+        "Incorporate weekly clay mask for T-zone",
+        "Use leave-in conditioner for wave definition",
+        "Apply SPF 30+ every morning",
+      ],
+      shortTerm: [
+        "Establish protein treatment schedule",
+        "Balance moisture levels with hydrating toner",
+        "Protect waves with silk pillowcase",
+        "Monitor hyperpigmentation weekly",
+      ],
+      longTerm: [
+        "Build heat-free styling routine",
+        "Develop seasonal skincare adaptations",
+        "Regular trim schedule every 8-10 weeks",
+        "Maintain skin barrier health",
+      ],
+    },
+    comments: [
+      {
+        id: "c15",
+        username: "Peeyush",
+        text: "This is incredibly detailed! The Fitzpatrick scale analysis really helps understand sun protection needs 🌞",
+        timestamp: Date.now() - 863000000,
+      },
+      {
+        id: "c16",
+        username: "Sanjay",
+        text: "Thanks! The Andre Walker typing was eye-opening - finally understanding why certain products work better 🙌",
+        timestamp: Date.now() - 862000000,
+      },
+      {
+        id: "c17",
+        username: "Peeyush",
+        text: "How long did the whole analysis take? The actionable insights are super helpful!",
+        timestamp: Date.now() - 861000000,
       },
     ],
   },

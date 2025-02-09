@@ -9,23 +9,8 @@ import {
   ReactCompareSlider,
   // ReactCompareSliderImage,
 } from "react-compare-slider";
-import type { AnalysisResult } from "@/types";
+import type { Post } from "@/app/types";
 import { SAMPLE_POSTS } from "@/data/sample-posts";
-
-interface Post {
-  id: string;
-  type: string;
-  images: string[];
-  caption: string;
-  description: string;
-  timestamp: number;
-  username?: string;
-  votes?: {
-    better: number;
-    worse: number;
-  };
-  analysisResults?: AnalysisResult[];
-}
 
 export default function FeedPage() {
   const [posts, setPosts] = useState<Post[]>([]);
@@ -106,52 +91,78 @@ export default function FeedPage() {
                   <div className="h-[1px] bg-[#FFB74D]/10" />
 
                   {/* Image Section */}
-                  {post.type === "before-after" ? (
+                  {(post.type === "timeline" || post.type === "ai-edit") &&
+                  post.images.length > 1 ? (
                     <div className="space-y-2">
-                      <div className="aspect-square rounded-lg overflow-hidden relative group">
-                        {/* Slider Hint Overlay */}
-                        <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10">
-                          <div className="bg-black/30 text-white px-3 py-1 rounded-full text-xs backdrop-blur-sm">
-                            Slide to compare
-                          </div>
-                        </div>
-
-                        <ReactCompareSlider
-                          itemOne={
-                            <Image
-                              src={post.images[0]}
-                              alt="Before"
-                              className="object-cover"
-                              width={400}
-                              height={400}
-                            />
-                          }
-                          itemTwo={
-                            <Image
-                              src={post.images[1]}
-                              alt="After"
-                              className="object-cover"
-                              width={400}
-                              height={400}
-                            />
-                          }
-                          position={50}
-                          style={{
-                            height: "100%",
-                          }}
-                          className="h-full"
-                          handle={
-                            <div className="flex flex-col items-center gap-1">
-                              <div className="w-1 h-12 bg-white rounded-full shadow-lg" />
-                              <div className="w-4 h-4 rounded-full bg-white shadow-lg flex items-center justify-center">
-                                <div className="w-2 h-2 bg-[#FFB74D] rounded-full" />
-                              </div>
-                              <div className="w-1 h-12 bg-white rounded-full shadow-lg" />
-                            </div>
-                          }
+                      <div className="relative w-full h-full">
+                        <Image
+                          src={post.images[0]}
+                          alt={post.type === "timeline" ? "Before" : "Original"}
+                          className="object-cover"
+                          fill
+                          sizes="(max-width: 500px) 100vw, 500px"
+                          priority
+                          style={{ objectPosition: "center" }}
                         />
                       </div>
-
+                      <div className="relative w-full h-full">
+                        <Image
+                          src={post.images[1]}
+                          alt={post.type === "timeline" ? "After" : "AI Edit"}
+                          className="object-cover"
+                          fill
+                          sizes="(max-width: 500px) 100vw, 500px"
+                          priority
+                          style={{ objectPosition: "center" }}
+                        />
+                      </div>
+                      <ReactCompareSlider
+                        itemOne={
+                          <div className="relative w-full h-full">
+                            <Image
+                              src={post.images[0]}
+                              alt={
+                                post.type === "timeline" ? "Before" : "Original"
+                              }
+                              className="object-cover"
+                              fill
+                              sizes="(max-width: 500px) 100vw, 500px"
+                              priority
+                              style={{ objectPosition: "center" }}
+                            />
+                          </div>
+                        }
+                        itemTwo={
+                          <div className="relative w-full h-full">
+                            <Image
+                              src={post.images[1]}
+                              alt={
+                                post.type === "timeline" ? "After" : "AI Edit"
+                              }
+                              className="object-cover"
+                              fill
+                              sizes="(max-width: 500px) 100vw, 500px"
+                              priority
+                              style={{ objectPosition: "center" }}
+                            />
+                          </div>
+                        }
+                        position={50}
+                        style={{
+                          height: "500px",
+                          width: "100%",
+                        }}
+                        className="rounded-lg"
+                        handle={
+                          <div className="flex flex-col items-center gap-1">
+                            <div className="w-1 h-12 bg-white rounded-full shadow-lg" />
+                            <div className="w-4 h-4 rounded-full bg-white shadow-lg flex items-center justify-center">
+                              <div className="w-2 h-2 bg-[#FFB74D] rounded-full" />
+                            </div>
+                            <div className="w-1 h-12 bg-white rounded-full shadow-lg" />
+                          </div>
+                        }
+                      />
                       {/* Voting Section */}
                       <div className="flex items-center justify-center gap-6 py-2">
                         <button
@@ -166,7 +177,9 @@ export default function FeedPage() {
                           </span>
                         </button>
                         <div className="text-xs text-[#8B6B3D]/50">
-                          Rate the transformation
+                          {post.type === "timeline"
+                            ? "Rate the transformation"
+                            : "Rate the edit"}
                         </div>
                         <button
                           onClick={() => handleVote(post.id, "worse")}
@@ -217,36 +230,317 @@ export default function FeedPage() {
                   </div>
 
                   {post.type === "analysis" && post.analysisResults && (
-                    <div className="mt-4 bg-[#FFB74D]/5 rounded-lg p-4">
-                      <h4 className="text-sm font-medium text-[#8B6B3D] mb-2">
-                        Analysis Results
-                      </h4>
-                      <div className="space-y-2">
-                        {post.analysisResults.map((result) => (
-                          <div
-                            key={result.ruleId}
-                            className="flex items-start gap-2 text-xs"
-                          >
+                    <div className="mt-4 space-y-4">
+                      {/* Regular Analysis Display */}
+                      <div className="bg-[#FFB74D]/5 rounded-lg p-4">
+                        <h4 className="text-sm font-medium text-[#8B6B3D] mb-2">
+                          Analysis Results
+                        </h4>
+                        <div className="space-y-2">
+                          {post.analysisResults.map((result) => (
                             <div
-                              className={`w-4 h-4 rounded-full flex-shrink-0 flex items-center justify-center ${
-                                result.compliant
-                                  ? "bg-green-100 text-green-600"
-                                  : "bg-red-100 text-red-600"
-                              }`}
+                              key={result.ruleId}
+                              className="flex items-start gap-2 text-xs"
                             >
-                              {result.compliant ? "✓" : "×"}
-                            </div>
-                            <div className="flex-1">
-                              <div className="font-medium text-[#8B6B3D]">
-                                Score: {result.score}/5
+                              <div
+                                className={`w-4 h-4 rounded-full flex-shrink-0 flex items-center justify-center ${
+                                  result.compliant
+                                    ? "bg-green-100 text-green-600"
+                                    : "bg-red-100 text-red-600"
+                                }`}
+                              >
+                                {result.compliant ? "✓" : "×"}
                               </div>
-                              <p className="text-[#8B6B3D]/70">
-                                {result.explanation}
-                              </p>
+                              <div className="flex-1">
+                                <div className="font-medium text-[#8B6B3D]">
+                                  Score: {result.score}/5
+                                </div>
+                                <p className="text-[#8B6B3D]/70">
+                                  {result.explanation}
+                                </p>
+                              </div>
                             </div>
-                          </div>
-                        ))}
+                          ))}
+                        </div>
                       </div>
+
+                      {/* In-Depth Analysis Display */}
+                      {post.analysisResults.some(
+                        (result) => result.details
+                      ) && (
+                        <div className="bg-[#FFB74D]/5 rounded-lg p-4 space-y-6">
+                          <h4 className="text-sm font-medium text-[#8B6B3D]">
+                            Detailed Analysis
+                          </h4>
+
+                          {/* Fitzpatrick Scale Analysis */}
+                          {post.analysisResults.find(
+                            (r) => r.ruleId === "fitzpatrick"
+                          ) && (
+                            <div className="space-y-2">
+                              <h5 className="text-xs font-medium text-[#8B6B3D] uppercase tracking-wide">
+                                Fitzpatrick Scale Analysis
+                              </h5>
+                              <div className="rounded-md bg-white/50 p-3 space-y-3 text-sm">
+                                {/* Get Fitzpatrick details */}
+                                {(() => {
+                                  const fitzResult = post.analysisResults.find(
+                                    (r) => r.ruleId === "fitzpatrick"
+                                  );
+                                  return (
+                                    <div className="space-y-4">
+                                      <div>
+                                        <h6 className="text-xs font-medium text-[#C4944C] mb-2">
+                                          Characteristics
+                                        </h6>
+                                        <ul className="text-xs space-y-1">
+                                          {fitzResult?.details?.characteristics?.map(
+                                            (char, i) => (
+                                              <li
+                                                key={i}
+                                                className="flex items-start gap-1"
+                                              >
+                                                <span className="text-[#C4944C]">
+                                                  •
+                                                </span>
+                                                <span className="text-[#8B6B3D]">
+                                                  {char}
+                                                </span>
+                                              </li>
+                                            )
+                                          )}
+                                        </ul>
+                                      </div>
+
+                                      <div>
+                                        <h6 className="text-xs font-medium text-[#C4944C] mb-2">
+                                          Recommendations
+                                        </h6>
+                                        <ul className="text-xs space-y-1">
+                                          {fitzResult?.details?.recommendations?.map(
+                                            (rec, i) => (
+                                              <li
+                                                key={i}
+                                                className="flex items-start gap-1"
+                                              >
+                                                <span className="text-[#C4944C]">
+                                                  •
+                                                </span>
+                                                <span className="text-[#8B6B3D]">
+                                                  {rec}
+                                                </span>
+                                              </li>
+                                            )
+                                          )}
+                                        </ul>
+                                      </div>
+
+                                      <div>
+                                        <h6 className="text-xs font-medium text-[#C4944C] mb-2">
+                                          Risk Factors
+                                        </h6>
+                                        <ul className="text-xs space-y-1">
+                                          {fitzResult?.details?.risks?.map(
+                                            (risk, i) => (
+                                              <li
+                                                key={i}
+                                                className="flex items-start gap-1"
+                                              >
+                                                <span className="text-[#C4944C]">
+                                                  •
+                                                </span>
+                                                <span className="text-[#8B6B3D]">
+                                                  {risk}
+                                                </span>
+                                              </li>
+                                            )
+                                          )}
+                                        </ul>
+                                      </div>
+                                    </div>
+                                  );
+                                })()}
+                              </div>
+                            </div>
+                          )}
+
+                          {/* Andre Walker Hair Analysis */}
+                          {post.analysisResults.find(
+                            (r) => r.ruleId === "andre-walker"
+                          ) && (
+                            <div className="space-y-2">
+                              <h5 className="text-xs font-medium text-[#8B6B3D] uppercase tracking-wide">
+                                Andre Walker Hair Analysis
+                              </h5>
+                              <div className="rounded-md bg-white/50 p-3 space-y-3 text-sm">
+                                {(() => {
+                                  const hairResult = post.analysisResults.find(
+                                    (r) => r.ruleId === "andre-walker"
+                                  );
+                                  return (
+                                    <div className="space-y-4">
+                                      <div>
+                                        <h6 className="text-xs font-medium text-[#C4944C] mb-2">
+                                          Hair Characteristics
+                                        </h6>
+                                        <div className="grid grid-cols-2 gap-2 text-xs">
+                                          {Object.entries(
+                                            hairResult?.details
+                                              ?.hairCharacteristics || {}
+                                          ).map(([key, value]) => (
+                                            <div
+                                              key={key}
+                                              className="flex items-start gap-1"
+                                            >
+                                              <span className="text-[#C4944C] font-medium capitalize">
+                                                {key}:
+                                              </span>
+                                              <span className="text-[#8B6B3D]">
+                                                {value}
+                                              </span>
+                                            </div>
+                                          ))}
+                                        </div>
+                                      </div>
+
+                                      <div>
+                                        <h6 className="text-xs font-medium text-[#C4944C] mb-2">
+                                          Wave Pattern
+                                        </h6>
+                                        <p className="text-xs text-[#8B6B3D] mb-2">
+                                          {
+                                            hairResult?.details?.wavePattern
+                                              ?.description
+                                          }
+                                        </p>
+                                        <ul className="text-xs space-y-1">
+                                          {hairResult?.details?.wavePattern?.features?.map(
+                                            (feature, i) => (
+                                              <li
+                                                key={i}
+                                                className="flex items-start gap-1"
+                                              >
+                                                <span className="text-[#C4944C]">
+                                                  •
+                                                </span>
+                                                <span className="text-[#8B6B3D]">
+                                                  {feature}
+                                                </span>
+                                              </li>
+                                            )
+                                          )}
+                                        </ul>
+                                      </div>
+
+                                      <div>
+                                        <h6 className="text-xs font-medium text-[#C4944C] mb-2">
+                                          Care Needs
+                                        </h6>
+                                        <ul className="text-xs space-y-1">
+                                          {hairResult?.details?.careNeeds?.map(
+                                            (need, i) => (
+                                              <li
+                                                key={i}
+                                                className="flex items-start gap-1"
+                                              >
+                                                <span className="text-[#C4944C]">
+                                                  •
+                                                </span>
+                                                <span className="text-[#8B6B3D]">
+                                                  {need}
+                                                </span>
+                                              </li>
+                                            )
+                                          )}
+                                        </ul>
+                                      </div>
+                                    </div>
+                                  );
+                                })()}
+                              </div>
+                            </div>
+                          )}
+
+                          {/* Actionable Insights - Update the grid to show all sections */}
+                          {post.actionableInsights && (
+                            <div className="space-y-2">
+                              <h5 className="text-xs font-medium text-[#8B6B3D] uppercase tracking-wide">
+                                Actionable Insights
+                              </h5>
+                              <div className="grid grid-cols-3 gap-3">
+                                <div className="bg-white/50 rounded-md p-3">
+                                  <h6 className="text-xs font-medium text-[#C4944C] mb-2">
+                                    Immediate Actions
+                                  </h6>
+                                  <ul className="text-xs space-y-1">
+                                    {post.actionableInsights.immediate.map(
+                                      (action, i) => (
+                                        <li
+                                          key={i}
+                                          className="flex items-start gap-1"
+                                        >
+                                          <span className="text-[#C4944C]">
+                                            •
+                                          </span>
+                                          <span className="text-[#8B6B3D]">
+                                            {action}
+                                          </span>
+                                        </li>
+                                      )
+                                    )}
+                                  </ul>
+                                </div>
+
+                                <div className="bg-white/50 rounded-md p-3">
+                                  <h6 className="text-xs font-medium text-[#C4944C] mb-2">
+                                    Short-term Goals
+                                  </h6>
+                                  <ul className="text-xs space-y-1">
+                                    {post.actionableInsights.shortTerm.map(
+                                      (action, i) => (
+                                        <li
+                                          key={i}
+                                          className="flex items-start gap-1"
+                                        >
+                                          <span className="text-[#C4944C]">
+                                            •
+                                          </span>
+                                          <span className="text-[#8B6B3D]">
+                                            {action}
+                                          </span>
+                                        </li>
+                                      )
+                                    )}
+                                  </ul>
+                                </div>
+
+                                <div className="bg-white/50 rounded-md p-3">
+                                  <h6 className="text-xs font-medium text-[#C4944C] mb-2">
+                                    Long-term Goals
+                                  </h6>
+                                  <ul className="text-xs space-y-1">
+                                    {post.actionableInsights.longTerm.map(
+                                      (action, i) => (
+                                        <li
+                                          key={i}
+                                          className="flex items-start gap-1"
+                                        >
+                                          <span className="text-[#C4944C]">
+                                            •
+                                          </span>
+                                          <span className="text-[#8B6B3D]">
+                                            {action}
+                                          </span>
+                                        </li>
+                                      )
+                                    )}
+                                  </ul>
+                                </div>
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      )}
                     </div>
                   )}
                 </div>
