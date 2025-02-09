@@ -124,3 +124,7 @@
 3. Network connectivity issues
 4. Invalid image format
 5. Content moderation flags
+
+So the other part of my idea is to basically have a bunch of discount coupons that L'Oreal will offer you after you have reviewed their products and have posted about it socially. So that way more people will want to use the products and want to create a higher net promoter score amongst people who want to get recommended. and and this should probably be another page and basically every comment or whatever can be tagged with one of those products But the only challenge in this is that I will actually need to have a database or not even a database. I will need to have a list of images as well as the product name, the SKU number, availability and a bunch of important information regarding the product and brand under L'Oréal. Also, the other idea is when people upload their bills for a L'Oréal product, then they are eligible for a discount. So this will lead into the idea which I talked about before.
+
+So, the other thing I am thinking is also to add a bunch of scores to give you different types of skin score and hair score to try and assess what parts of your skin care and hair care routine is good, bad etc. So, it can give proper standing and may be give the score out of 100 and have it granularized and have different metrics by which to measure it.

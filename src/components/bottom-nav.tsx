@@ -11,7 +11,7 @@ export function BottomNav() {
           variant="ghost"
           className="flex flex-col items-center text-[#C4944C] hover:text-[#8B6B3D] hover:bg-[#FFF5E1]"
         >
-          <Link href="/feed">
+          <Link href="/demo/feed">
             <HomeIcon size={24} />
             <span className="text-xs mt-1">Feed</span>
           </Link>
@@ -22,7 +22,7 @@ export function BottomNav() {
           variant="ghost"
           className="flex flex-col items-center text-[#C4944C] hover:text-[#8B6B3D] hover:bg-[#FFF5E1]"
         >
-          <Link href="/create">
+          <Link href="/demo/create">
             <PlusCircle size={24} />
             <span className="text-xs mt-1">Create</span>
           </Link>
@@ -33,7 +33,7 @@ export function BottomNav() {
           variant="ghost"
           className="flex flex-col items-center text-[#C4944C] hover:text-[#8B6B3D] hover:bg-[#FFF5E1]"
         >
-          <Link href="/profile">
+          <Link href="/demo/profile">
             <User size={24} />
             <span className="text-xs mt-1">Profile</span>
           </Link>
